@@ -1,0 +1,57 @@
+<body>
+    <div>
+        <div style="border: 1px solid black; float: left; width: 14%;">
+            <%
+            var packet = packet;
+            var p_size = packet.length;
+            for (var t = 0;  t < p_size; t += 0x10){
+
+            %>
+                    <%=("00000000" + t.toString(16)).substr(-8)%>
+                    <br>
+            <%
+            
+                }
+            %>
+        </div>
+        <div style="border: 1px solid black; float: left; width: 60%;">
+                <%
+                    p_size = packet.length;
+                    for (var t = 0;  t < p_size; t += 0x10){
+                            for(var s = t; s < t + 0x10; s++){//hex값 출력
+                                var hex = packet.charCodeAt(s);
+                                if(s == p_size)break;
+                                if(hex < 0x10){
+                    %>
+                                    0<%=hex.toString(16)%>&nbsp;
+                    <%
+                                }
+                                else{
+                    %>      
+                                    <%=hex.toString(16)%>&nbsp;
+                    <% 
+                                }
+                            }
+                            %><br><%
+                    }%>
+        </div>
+        <div style="border: 1px solid black; float: left; width: 15%;">
+            <%    
+                p_size = packet.length;
+                for (var t = 0;  t < p_size; t += 0x10){
+                        var raw = "";
+                        for(var s = t; s < t + 0x10; s++){
+                            if(s == p_size)break;
+                            if(packet.charCodeAt(s)<0x20 || (packet.charCodeAt(s)>=127 && packet.charCodeAt(s) <= 160) || packet.charCodeAt(s) == 173)
+                                raw += '.';
+                            else if (packet.charCodeAt(s) == 0x20)
+                                raw += ' ';
+                            else
+                                raw += packet[s];
+                        }
+            %>
+                    <%=raw%><br>
+            <%  }%>
+        </div>
+    </div>
+</body>

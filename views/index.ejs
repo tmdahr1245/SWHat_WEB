@@ -1,0 +1,368 @@
+<html>
+  	<head>
+	    <title><%= title %></title>
+		<link rel="stylesheet" type="text/css" href="../../../css/style.css">
+		<link rel="stylesheet" href="../../../js/Treant.css" type="text/css" />
+		<script src="../../../js/vendor/raphael.js"></script>
+		<script src="../../../js/Treant.js"></script>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+		<style>
+			li a {
+				color: black;
+			}
+			#pid_table th {
+				border-right: 1px solid #dee2e6;
+				width : 25%;
+			}
+		</style>
+  	</head>
+  	<body>
+	<div class="row" style="
+    padding-top: 20px;
+    padding-left: 50px;
+    margin-bottom: 10px;
+    border-bottom: 4px solid #d2d2d2;
+    background-color: #565656;
+">
+		<a href="/" style="text-decoration: none;"><h2 style="color: white; text-decoration: overline; text-transform: uppercase;">DaDol</h2></a>
+	</div>
+	<div style="width: 95% !important; margin: auto; margin-bottom: 30px;">
+		<div class="container" style="max-width: none; height: 700px;">
+			<div class="row">
+				<div class="col" style="height: 700px; padding-top: 150px; border: 1px solid #a0a0a0; border-radius: 30px; margin-right: 10px;">
+					<div class="row">
+						<div id="tree-simple" style="margin: auto;"></div>
+					</div>
+					<div class="row">
+						<div class="col">
+							<table class="table" id="pid_table">
+								<tr>
+									<th>PID</th>
+									<td><%=pid%></td>
+								</tr>
+								<tr>
+									<th>FILE NAME</th>
+									<td><%=process_name%></td>
+								</tr>
+								<tr>
+									<th>FILE</th>
+									<td><%=file_list.length%></td>
+								</tr>
+								<tr>
+									<th>PROCESS</th>
+									<td><%=process_list.length + memory_list.length%></td>
+								</tr>
+								<tr>
+									<th>REGISTRY</th>
+									<%var reg_cnt = createreg_list.length+setvaluereg_list.length+deletekeyreg_list.length+deletevaluereg_list.length%>
+									<td><%=reg_cnt%></td>
+								</tr>
+								<tr>
+									<th>SOCKET</th>
+									<td><%=connect_list.length%></td>
+								</tr>
+								<tr>
+									<th>SERVICE</th>
+									<td><%=createservice_list.length+startservice_list.length+deleteservice_list.length+controlservice_list.length%></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="col" style="overflow-y: scroll; height: 700px; border: 1px solid #a0a0a0; border-radius: 30px; margin: auto;">
+					<div class="row" style="margin-top: 8px;">
+						<div class="col">
+							<ul class="nav nav-tabs">
+							<li class="nav-item">
+								<a class="nav-link" href="#" onclick="show_other('file')">File</a>
+							</li>
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" href="#" aria-haspopup="true" aria-expanded="false">Process</a>
+
+								<div class="dropdown-menu">
+									<a class="dropdown-item" href="#" onclick="show_other('c_process')">Create Process</a>
+									<a class="dropdown-item" href="#" onclick="show_other('w_memory')">Write Memory</a>
+								</div>
+							</li>
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" href="#" aria-haspopup="true" aria-expanded="false">Registry</a>
+
+								<div class="dropdown-menu">
+									<a class="dropdown-item" href="#" onclick="show_other('c_registry')">Create</a>
+									<a class="dropdown-item" href="#" onclick="show_other('s_registry')">Set</a>
+									<a class="dropdown-item" href="#" onclick="show_other('d_registry')">Delete</a>
+								</div>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#" onclick="show_other('socket')">Socket</a>
+							</li>
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" href="#" aria-haspopup="true" aria-expanded="false">Service</a>
+
+								<div class="dropdown-menu">
+									<a class="dropdown-item" href="#" onclick="show_other('c_service')">Create</a>
+									<a class="dropdown-item" href="#" onclick="show_other('s_service')">Start</a>
+									<a class="dropdown-item" href="#" onclick="show_other('d_service')">Delete</a>
+									<a class="dropdown-item" href="#" onclick="show_other('con_service')">Control</a>
+								</div>
+							</li>
+						</ul>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col data-content" style="text-overflow: ellipsis; width: 100%; overflow: scroll; height: 650px;">
+							<table class="table" id="file">
+								<thead>
+									<tr>
+										<th scope="col">Time Stamp</th>
+										<th scope="col">File Name</th>
+										<th scope="col">File Size</th>
+									</tr>
+								</thead>
+								<tbody>
+									<% for(var i = 0; i < file_list.length; i++){%>
+									<% var path = "/download/" + timestamp + '/' + pid%>
+									<% var file_name = file_list[i][0].replace(/\\/gi,'/').split("/").pop();%>
+									<tr>
+										<td><%=file_list[i][1]%></td>
+										<td style="text-overflow: ellipsis;"><a href="<%=path%>/<%=file_name%>"><%=file_list[i][0]%></a></td>
+										<td><%=file_list[i][2]%>byte</td>
+									</tr>
+									<% } %>
+								</tbody>
+							</table>
+
+							<!-- Create Process Table -->
+							<table class="table" id="c_process" style="display: none;">
+								<thead>
+									<tr>
+										<th>Pid</th>
+										<th>File Name</th>
+										<th>Command</th>
+									</tr>
+								</thead>
+								<tbody>
+									<% for(var i = 0; i < process_list.length; i++){%>
+									<tr>
+										<td><a href='<%=process_list[i][0]%>?parent=<%=pid%>'><%=process_list[i][0]%></a></td>
+										<td><%=process_list[i][1]%></td>
+										<td><%=process_list[i][2]%></td>
+									</tr>
+									<% } %>
+								</tbody>
+							</table>
+							<!-- Write Memory Table -->
+							<table class="table" id="w_memory" style="display: none;">
+								<thead>
+									<th>Pid</th>
+									<th>Adress</th>
+									<th>Buffer</th>
+								</thead>
+								<tbody>
+									<% for(var i = 0; i < memory_list.length; i++){%>
+									<tr>
+										<td><%=memory_list[i][0]%></td>
+										<td><%=memory_list[i][1]%></td>
+										<td><%=memory_list[i][2]%></td>
+									</tr>
+									<% } %>
+								</tbody>
+							</table>
+
+							<!-- Create Registry Table -->
+							<table class="table" id="c_registry" style="display: none;">
+								<thead>
+									<th>Time</th>
+									<th>Hive</th>
+									<th>Adress</th>
+								</thead>
+								<tbody>
+									<% for(var i = 0; i < createreg_list.length; i++){%>
+									<tr>
+										<td><%=createreg_list[i][0]%></td>
+										<td><%=createreg_list[i][1]%></td>
+										<td><%=createreg_list[i][2]%></td>
+									</tr>
+									<% } %>
+								</tbody>
+							</table>
+
+							<!-- Set Registry Table -->
+							<table class="table" id="s_registry" style="display: none;">
+								<thead>
+									<th>Time</th>
+									<th>Hive</th>
+									<th>Adress</th>
+									<th>Key</th>
+									<th>Value</th>
+								</thead>
+								<tbody>
+									<% for(var i = 0; i < setvaluereg_list.length; i++){%>
+									<tr>
+										<td><%=setvaluereg_list[i][0]%></td>
+										<td><%=setvaluereg_list[i][1]%></td>
+										<td><%=setvaluereg_list[i][2]%></td>
+										<td><%=setvaluereg_list[i][3]%></td>
+										<td><%=setvaluereg_list[i][4]%></td>
+									</tr>
+									<% } %>
+								</tbody>
+							</table>
+
+							<!-- Delete Registry Table -->
+							<table class="table" id="d_registry" style="display: none;">
+								<thead>
+									<th>Time</th>
+									<th>Hive</th>
+									<th>Adress</th>
+									<th>Key</th>
+								</thead>
+								<tbody>
+									<% for(var i = 0; i < deletekeyreg_list.length; i++){%>
+									<tr>
+										<td><%=deletekeyreg_list[i][0]%></td>
+										<td><%=deletekeyreg_list[i][1]%></td>
+										<td><%=deletekeyreg_list[i][2]%></td>
+										<td><%=deletekeyreg_list[i][3]%></td>
+									</tr>
+									<% } %>
+								</tbody>
+							</table>
+
+							<!-- Socket Table -->
+							<table class="table" id="socket" style="display: none;">
+								<thead>
+									<th>IP</th>
+									<th>Port</th>
+									<th>Status</th>
+								</thead>
+								<tbody>
+									<% for(var i = 0; i < connect_list.length; i++){%>
+									<tr>
+										<td><%=connect_list[i][1]%></td>
+										<td><%=connect_list[i][2]%></td>
+										<td><%=connect_list[i][3]%></td>
+									</tr>
+									<% } %>
+								</tbody>
+							</table>
+
+							<!-- Create Service Table -->
+							<table class="table" id="c_service" style="display: none;">
+								<thead>
+									<th>Time</th>
+									<th>Handle</th>
+									<th>Service Name</th>
+									<th>Adress</th>
+								</thead>
+								<tbody>
+									<% for(var i = 0; i < createservice_list.length; i++){%>
+									<tr>
+										<td><%=createservice_list[i][0]%></td>
+										<td><%=createservice_list[i][1]%></td>
+										<td><%=createservice_list[i][2]%></td>
+										<td><%=createservice_list[i][3]%></td>
+									</tr>
+									<% } %>
+								</tbody>
+							</table>
+
+							<!-- Start Service Table -->
+							<table class="table" id="s_service" style="display: none;">
+								<thead>
+									<th>Time</th>
+									<th>Name</th>
+								</thead>
+								<tbody>
+									<% for(var i = 0; i < startservice_list.length; i++){%>
+									<tr>
+										<td><%=startservice_list[i][0]%></td>
+										<td><%=startservice_list[i][1]%></td>
+									</tr>
+									<% } %>
+								</tbody>
+							</table>
+
+							<!-- Delete Service Table -->
+							<table class="table" id="d_service" style="display: none;">
+								<thead>
+									<th>Time</th>
+									<th>Name</th>
+								</thead>
+								<tbody>
+									<% for(var i = 0; i < deleteservice_list.length; i++){%>
+									<tr>
+										<td><%=deleteservice_list[i][0]%></td>
+										<td><%=deleteservice_list[i][1]%></td>
+									</tr>
+									<% } %>
+								</tbody>
+							</table>
+
+							<!-- Control Service Table -->
+							<table class="table" id="con_service" style="display: none;">
+								<thead>
+									<th>Time</th>
+									<th>Service Name</th>
+									<th>Type</th>
+								</thead>
+								<tbody>
+									<% for(var i = 0; i < controlservice_list.length; i++){%>
+									<tr>
+										<td><%=controlservice_list[i][0]%></td>
+										<td><%=controlservice_list[i][1]%></td>
+										<td><%=controlservice_list[i][2]%></td>
+									</tr>
+									<% } %>
+								</tbody>
+							</table>
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+<script>
+	tree_json = {
+			chart: { container: '#tree-simple' },
+			nodeStructure: {
+				text: { name: '7680' },
+				children: [
+					{ text: { name: '1756' } },
+					{ text: { name: '6744' } },
+					{ text: { name: '3400' } },
+					{ text: { name: '1988' } },
+					{ text: { name: '2228' }, children: [{text:{name:3496}},{text:{name:4652}}] },
+					{ text: { name: '1320' } },
+					{ text: { name: '5332' } },
+					{ text: { name: '8036' } },
+					{ text: { name: '1540' } },
+					{ text: { name: '2148' } }
+				]
+			}
+		}
+	var my_chart = new Treant(tree_json);
+
+	function show_other(type) {
+		$('#file').hide();
+		$('#c_process').hide();
+		$('#w_memory').hide();
+		$('#c_registry').hide();
+		$('#s_registry').hide();
+		$('#d_registry').hide();
+		$('#socket').hide();
+		$('#c_service').hide();
+		$('#s_service').hide();
+		$('#d_service').hide();
+		$('#con_service').hide();
+
+		$('#'+type).show();
+	}
+</script>
