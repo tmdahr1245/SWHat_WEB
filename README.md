@@ -1,1 +1,1 @@
-# SWHat_WEB
+# Software Maestro Project
