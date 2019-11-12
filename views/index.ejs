@@ -17,28 +17,55 @@
 				border-right: 1px solid #dee2e6;
 				width : 25%;
 			}
+			.logo {
+				color: black; 
+				text-decoration: overline; 
+				text-transform: uppercase;
+				margin-bottom: -6px;
+				font-size: 42px;
+				font-weight: 600;
+			}
+			.logo-downside {
+				font-size: 5;
+				margin: 0px;
+				color: black;
+			}
+			.file_info p {
+				color : #c1c1c1;
+			}
+			.ellip {
+				text-overflow: ellipsis;
+				overflow: hidden;
+				white-space: nowrap;
+			}
 		</style>
   	</head>
   	<body>
-	<div class="row" style="
-    padding-top: 20px;
-    padding-left: 50px;
-    margin-bottom: 10px;
-    border-bottom: 4px solid #d2d2d2;
-    background-color: #565656;
-">
-		<a href="/" style="text-decoration: none;"><h2 style="color: white; text-decoration: overline; text-transform: uppercase;">DaDol</h2></a>
-	</div>
 	<div style="width: 95% !important; margin: auto; margin-bottom: 30px;">
-		<div class="container" style="max-width: none; height: 700px;">
+		<div class="container" style="max-width: none; height: 700px; padding-top: 25px;">
 			<div class="row">
-				<div class="col" style="height: 700px; padding-top: 150px; border: 1px solid #a0a0a0; border-radius: 30px; margin-right: 10px;">
-					<div class="row">
-						<div id="tree-simple" style="margin: auto;"></div>
+				<!-- leftside -->
+				<div class="col" style="height: 700px; margin-right: 10px;">
+					<!-- logo -->
+					<div class="row" style="margin-bottom: 60px;">
+						<a href="/" style="text-decoration: none;">
+							<h2 class="logo">DaDol</h2>
+							<p class="logo-downside">EXECUTABLE FILE ANALYSIS</p>
+						</a>
 					</div>
+					<!-- logo fin -->
+
+					<!-- tree -->
+					<div class="row">
+						<div id="tree-simple" style="margin: auto; margin-bottom: 20px;"></div>
+					</div>
+					<!-- tree fin -->
+
+					<!-- progress table -->
 					<div class="row">
 						<div class="col">
-							<table class="table" id="pid_table">
+							<h4 style="border-bottom: 2px solid black;">FILE DETAILS</h2>
+							<table class="table table-striped" id="pid_table">
 								<tr>
 									<th>PID</th>
 									<td><%=pid%></td>
@@ -72,7 +99,30 @@
 						</div>
 					</div>
 				</div>
-				<div class="col" style="overflow-y: scroll; height: 700px; border: 1px solid #a0a0a0; border-radius: 30px; margin: auto;">
+				<!-- leftside fin -->
+
+				<!-- rightside -->
+				<div class="col" style="overflow-y: scroll; height: 700px; border-left: 1px solid #f2f2f2; margin: auto;">
+
+					<!-- file infromation -->
+					<div class="file_info">
+						<div class="row">
+							<div class="col">
+								<h4><%=process_name%></h4>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<p>UPLOAD : </p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<p>RISK : <span style="background-color: red; color: white;">HIGH</span></p>
+							</div>
+						</div>
+					</div>
+
 					<div class="row" style="margin-top: 8px;">
 						<div class="col">
 							<ul class="nav nav-tabs">
@@ -114,6 +164,8 @@
 					</div>
 					<div class="row">
 						<div class="col data-content" style="text-overflow: ellipsis; width: 100%; overflow: scroll; height: 650px;">
+
+							<!-- file table -->
 							<table class="table" id="file">
 								<thead>
 									<tr>
@@ -127,13 +179,16 @@
 									<% var path = "/download/" + timestamp + '/' + pid%>
 									<% var file_name = file_list[i][0].replace(/\\/gi,'/').split("/").pop();%>
 									<tr>
-										<td><%=file_list[i][1]%></td>
-										<td style="text-overflow: ellipsis;"><a href="<%=path%>/<%=file_name%>"><%=file_list[i][0]%></a></td>
-										<td><%=file_list[i][2]%>byte</td>
+										<td class="col-md-3"><%=file_list[i][1]%></td>
+										<td style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;max-width: 400px;" class="col-md-6">
+											<span onclick="show_file_path(<%=i%>)"><%=file_name%></span><br>
+											<a href="<%=path%>/<%=file_name%>" style="text-decoration: none; color: #bdbdbd; display: none;" id="f_<%=i%>"><%=file_list[i][0]%></a></td>
+										<td class="col-md-3"><%=file_list[i][2]%>byte</td>
 									</tr>
 									<% } %>
 								</tbody>
 							</table>
+							<!-- file table -->
 
 							<!-- Create Process Table -->
 							<table class="table" id="c_process" style="display: none;">
@@ -147,9 +202,9 @@
 								<tbody>
 									<% for(var i = 0; i < process_list.length; i++){%>
 									<tr>
-										<td><a href='<%=process_list[i][0]%>?parent=<%=pid%>'><%=process_list[i][0]%></a></td>
-										<td><%=process_list[i][1]%></td>
-										<td><%=process_list[i][2]%></td>
+										<td><a href='<%=process_list[i][0]%>?parent=<%=pid%>' style="color: #bdbdbd; text-decoration: none;"><%=process_list[i][0]%></a></td>
+										<td style="max-width: 300px;" class="ellip"><%=process_list[i][1]%></td>
+										<td style="max-width: 300px;" class="ellip"><%=process_list[i][2]%></td>
 									</tr>
 									<% } %>
 								</tbody>
@@ -165,8 +220,8 @@
 									<% for(var i = 0; i < memory_list.length; i++){%>
 									<tr>
 										<td><%=memory_list[i][0]%></td>
-										<td><%=memory_list[i][1]%></td>
-										<td><%=memory_list[i][2]%></td>
+										<td style="max-width: 300px" class="ellip"><%=memory_list[i][1]%></td>
+										<td style="max-width: 300px" class="ellip"><%=memory_list[i][2]%></td>
 									</tr>
 									<% } %>
 								</tbody>
@@ -364,5 +419,13 @@
 		$('#con_service').hide();
 
 		$('#'+type).show();
+	}
+
+	function show_file_path(i) {
+		if($('#f_'+i).is(':hidden')) {
+			$('#f_'+i).show();
+		}else {
+			$('#f_'+i).hide();
+		}
 	}
 </script>

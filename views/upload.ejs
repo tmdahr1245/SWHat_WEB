@@ -4,97 +4,125 @@
 <head>
 	<title><%=title%></title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
+	<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+	<style type="text/css">
+		.logo {
+			color: black; 
+			text-decoration: overline; 
+			text-transform: uppercase;
+			margin-bottom: -6px;
+			font-size: 100px;
+			font-weight: 600;
+		}
+		.logo-downside {
+			font-size: 25px;
+			margin: 0px;
+			color: black;
+		}
+	</style>
 </head>
 
 <body>
-	<div class="row" style="
-    padding-top: 20px;
-    padding-left: 50px;
-    margin-bottom: 10px;
-    border-bottom: 4px solid #d2d2d2;
-    background-color: #565656;
-	">
-		<a href="/" style="text-decoration: none;"><h2 style="color: white; text-decoration: overline; text-transform: uppercase;">DaDol</h2></a>
-	</div>
-	<div style="margin: auto; width: 50%; margin-top: 150px;">
-		<form id="uploadForm" action="/create" method="post" enctype="multipart/form-data" style="width: 89%; float: left;">
-			<div class="custom-file">
-		    	<input type="file" class="custom-file-input" id="file" name="userFile" aria-describedby="inputGroupFileAddon01" accept=".exe">
-		    	<label class="custom-file-label" for="file" id="file_label">Choose file</label>
-		  	</div>
-		</form>
-		<button class="btn btn-light" id="myBtn" onclick="modal()" style="background-color: #e9ecef; border: 1px solid #ced4da;">submit</button>
+	<div style="width: 100%; height: 100vh;">
+		<!-- logo -->
+		<div style="margin: auto; width: 50%; text-align: center; padding-top: 100px;">
+			<a href="/" style="text-decoration: none;">
+				<h2 class="logo">DaDol</h2>
+				<p class="logo-downside">EXECUTABLE FILE ANALYSIS</p>
+			</a>
+		</div>
+		<!-- logo fin -->
+
+		<div style="margin: auto; width: 50%; padding-top: 80px;">
+			<form id="uploadForm" action="/create" method="post" enctype="multipart/form-data" style="width: 89%; float: left;">
+				<div class="custom-file">
+			    	<input type="file" class="custom-file-input" id="file" name="userFile" aria-describedby="inputGroupFileAddon01" accept=".exe">
+			    	<label class="custom-file-label" for="file" id="file_label">Choose file</label>
+			  	</div>
+			</form>
+			<button class="btn btn-light" id="myBtn" onclick="modal()" style="background-color: #e9ecef; border: 1px solid #ced4da;">submit</button>
+		</div>
+
+		<a href="#" style="text-decoration: none; color: black;" onclick="move_to_sub();">
+			<div style="width: 500px; margin: auto; text-align: center; padding-top: 200px; ">
+				<h2>Public Submissions</h2>
+				<p>
+		        	<span class="fas fa-angle-double-down"></span>
+	      		</p>
+			</div>
+		</a>
 	</div>
 
-	<div style="margin: auto; width: 50%; margin-top: 30px; height: 400px; overflow: scroll;">
-		<ul class="list-group list-group-flush">
-		<%
-			for(var i = 0; i < anal_list.length; i++){
-		%>
-				<li class="list-group-item">
-					<%=anal_list[i][3]%>&nbsp;&nbsp;&nbsp;<a href = '<%=anal_list[i][2]%>'><%=anal_list[i][0]%></a>&nbsp;&nbsp;&nbsp;
-					<%
-						var flag = true;
-						var per = anal_list[i][4].positives/anal_list[i][4].total;
-						var color;
-						if(anal_list[i][4] === "none")flag = false;
-						if(per <= 0.1)color = "green";
-						else if(per <= 0.5) color = "gold";
-						else color = "red";
-					%>
-					<%
-					if(flag){
-					%>
-					(<b style = "color:<%=color%>"><%=anal_list[i][4].total%>&nbsp;/&nbsp;<%=anal_list[i][4].positives%></b>&nbsp;&nbsp;engines detected this file)
-					<%}%>
-					<br>
-					<br>
-					
-					md5 : <%=anal_list[i][1]%><br>
-
-					<%
-					if(flag){
-					%>
-					sha1 : <%=anal_list[i][4].sha1%><br>
-					sha256 : <%=anal_list[i][4].sha256%><br>
-					<table>
+	<div style="width: 100%; height: 100vh; padding-top: 80px;" id="submissions">
+		<div style="margin: auto; width: 90%; margin-top: 30px; height: 500px; overflow: scroll; border-top: 2px solid; border-bottom: 2px solid;">
+			<ul class="list-group list-group-flush">
+			<%
+				for(var i = 0; i < anal_list.length; i++){
+			%>
+					<li class="list-group-item">
+						<%=anal_list[i][3]%>&nbsp;&nbsp;&nbsp;<a href = '<%=anal_list[i][2]%>'><%=anal_list[i][0]%></a>&nbsp;&nbsp;&nbsp;
 						<%
-						if(anal_list[i][4].positives){
+							var flag = true;
+							var per = anal_list[i][4].positives/anal_list[i][4].total;
+							var color;
+							if(anal_list[i][4] === "none")flag = false;
+							if(per <= 0.1)color = "green";
+							else if(per <= 0.5) color = "gold";
+							else color = "red";
 						%>
-						<tr>
-							<th>Company</th>
-							<th>Detection</th>
-						</tr>
+						<%
+						if(flag){
+						%>
+						(<b style = "color:<%=color%>"><%=anal_list[i][4].total%>&nbsp;/&nbsp;<%=anal_list[i][4].positives%></b>&nbsp;&nbsp;engines detected this file)
 						<%}%>
-					<%
-						for(var j = 0; j < anal_list[i][4].positives; j++){
-					%>
+						<br>
+						<br>
+						
+						md5 : <%=anal_list[i][1]%><br>
+
+						<%
+						if(flag){
+						%>
+						sha1 : <%=anal_list[i][4].sha1%><br>
+						sha256 : <%=anal_list[i][4].sha256%><br>
+						<table class="table table-striped">
+							<%
+							if(anal_list[i][4].positives){
+							%>
 							<tr>
-							<td><%=anal_list[i][4].log[j].key%></td>&nbsp;&nbsp;&nbsp;<td><%=anal_list[i][4].log[j].result%></td>
+								<th>Company</th>
+								<th>Detection</th>
 							</tr>
-					<%
+							<%}%>
+						<%
+							for(var j = 0; j < anal_list[i][4].positives; j++){
+						%>
+								<tr>
+								<td><%=anal_list[i][4].log[j].key%></td>&nbsp;&nbsp;&nbsp;<td><%=anal_list[i][4].log[j].result%></td>
+								</tr>
+						<%
+							}
+						%>
+						</table>
+						<br>
+						The above data is taken from a <a href = "https://www.virustotal.com/">virustotal.</a>
+						<%
+							}
+						else{
+						%>
+							<br>No matches found
+						<%
 						}
-					%>
-					</table>
-					<br>
-					The above data is taken from a <a href = "https://www.virustotal.com/">virustotal.</a>
-					<%
-						}
-					else{
-					%>
-						<br>No matches found
-					<%
-					}
-					%>
-				</li>
-		<%
-			}
-		%>
-		</ul>
+						%>
+					</li>
+			<%
+				}
+			%>
+			</ul>
+		</div>
 	</div>
 
 	<div id="myModal" style="display: none;">
@@ -122,6 +150,10 @@
 			var fileName = $(this).val();
 			$(this).next('.custom-file-label').html(fileName);
 		});
+
+		function move_to_sub() {
+			$('html, body').animate({ scrollTop: $('#submissions').offset().top }, 1000)
+		}
 	</script>
 </body>
 
