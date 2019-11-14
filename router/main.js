@@ -25,5 +25,10 @@ module.exports = function (app) {
 	app.get('/result/:timestamp/:pid', result);
 	app.get('/download/:timestamp/:pid/:filename', download);
 	app.get('/packet/:timestamp/:pid', packet);
+	app.get('/spice', function (req, res) {
+		res.render('spice', {
+		})
+	});
 	app.post('/create', upload.array('userFile', 1), create);
+
 }
