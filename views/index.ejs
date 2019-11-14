@@ -38,6 +38,11 @@
 				overflow: hidden;
 				white-space: nowrap;
 			}
+			.packet {
+				text-align: center;
+				line-height: 35px;
+				border-right: 1px solid #efefef;
+			}
 		</style>
   	</head>
   	<body>
@@ -109,16 +114,6 @@
 						<div class="row">
 							<div class="col">
 								<h4><%=process_name%></h4>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col">
-								<p>UPLOAD : </p>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col">
-								<p>RISK : <span style="background-color: red; color: white;">HIGH</span></p>
 							</div>
 						</div>
 					</div>
@@ -212,7 +207,7 @@
 							<!-- Write Memory Table -->
 							<table class="table" id="w_memory" style="display: none;">
 								<thead>
-									<th>Pid</th>
+									<th>PID</th>
 									<th>Adress</th>
 									<th>Buffer</th>
 								</thead>
@@ -295,11 +290,49 @@
 									<th>Status</th>
 								</thead>
 								<tbody>
+									<% packet_cnt = 0 %>
 									<% for(var i = 0; i < connect_list.length; i++){%>
-									<tr>
+									<tr onclick="show_packet(<%=i%>)">
 										<td><%=connect_list[i][1]%></td>
 										<td><%=connect_list[i][2]%></td>
 										<td><%=connect_list[i][3]%></td>
+									</tr>
+									<tr style="display: none;" id="p_<%=i%>">
+										<td colspan="3">
+											<div class="container">
+												<% if(connect_list[i].length > 4){%>
+													<% for(var j = 4; j < connect_list[i].length; j++){%>
+														<div class="row" style="height: 30px;">
+															<div class="col-md-3 packet">
+																<%=connect_list[i][j][3]%>
+															</div>
+															<div class="col-md-3 packet">
+																<%=connect_list[i][j][0]%>
+															</div>
+															<div class="col-md-3 packet">
+																<%=connect_list[i][j][1]%>
+															</div>
+															<div class="col-md-3 packet" style="border: 0px;">
+																<button type="button" class="btn" data-toggle="modal" data-target="#ModaL" style="width: 80%; height: 100%;" onclick="modal(<%=packet_cnt%>, '<%=connect_list[i][j][0]%>', '<%=connect_list[i][j][1]%>')">
+																	SHOW
+																</button>
+															</div>
+														</div>
+														<% packet_cnt += 1 %>
+													<% } %>
+												<% } %>
+											</div>
+											<!-- <ul class="list-group list-group-flush">
+												<% if(connect_list[i].length > 4){%>
+													<% for(var j = 4; j < connect_list[i].length; j++){%>
+														
+															<%=connect_list[i][j][3]%>&nbsp;&nbsp;
+															<%=connect_list[i][j][0]%>&nbsp;&nbsp;
+															<%=connect_list[i][j][1]%>&nbsp;&nbsp;
+													<% } %>
+												<% } %>
+											</ul> -->
+										</td>
 									</tr>
 									<% } %>
 								</tbody>
@@ -382,6 +415,23 @@
 			</div>
 		</div>
 	</div>
+
+	<!-- Modal -->
+	<div class="modal fade" id="ModaL" tabindex="-1" role="dialog" aria-labelledby="ModaL" aria-hidden="true">
+		<div class="modal-dialog" role="document" style="max-width: none; width: 70%;">
+		    <div class="modal-content">
+		    	<div class="modal-header">
+					<h5 class="modal-title"></h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+		    	<div class="modal-body">
+		    		<iframe id="modal_frame" src="" style="width: 100%; height: 400px;" frameborder = 0 framespacing = 0></iframe>
+		    	</div>
+		    </div>
+	    </div>
+	</div>
 </body>
 </html>
 <script>
@@ -419,6 +469,21 @@
 		$('#con_service').hide();
 
 		$('#'+type).show();
+	}
+
+	function show_packet(i) {
+		if($('#p_'+i).is(':hidden')) {
+			$('#p_'+i).show();
+		}else {
+			$('#p_'+i).hide();
+		}
+	}
+
+	function modal(cnt, s1, s2) {
+		$('#modal_frame').attr('src', '');
+		<% var path = "/packet/" + timestamp + '/' + String(pid) + '?packetNum=' %>
+		$('#modal_frame').attr('src', '<%=path%>'+cnt);
+		$('.modal-title').html(s1+'/'+s2);
 	}
 
 	function show_file_path(i) {
