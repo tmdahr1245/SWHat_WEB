@@ -3,32 +3,113 @@
 
 <head>
 	<title><%=title%></title>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
 	<script src='https://kit.fontawesome.com/a076d05399.js'></script>
 	<style type="text/css">
-		.logo {
-			color: black; 
-			text-decoration: overline; 
-			text-transform: uppercase;
-			margin-bottom: -6px;
-			font-size: 100px;
-			font-weight: 600;
-		}
-		.logo-downside {
-			font-size: 25px;
-			margin: 0px;
-			color: black;
-		}
 		#anal_list td {
 			padding: 0px;
 			text-align: center;
 			line-height: 35px;
 		}
+
 		#anal_list th {
 			text-align: center;
+		}
+
+		#anal_list p {
+			margin-bottom: 0px;
+		}
+
+		.col p {
+			margin-bottom: 0px;
+		}
+
+		.rd {
+			color: white;
+			background-color: red;
+		}
+
+		.gr {
+			color: white;
+			background-color: green;
+		}
+
+		.gl {
+			color: white;
+			background-color: gold;
+		}
+
+		.search {
+			width: 100%;
+			position: relative;
+			display: flex;
+		}
+
+		.searchTerm {
+			width: 100%;
+			border: 3px solid #d6d6d6;
+			border-right: none;
+			padding: 5px;
+			height: 36px;
+			border-radius: 5px 0 0 5px;
+			outline: none;
+			color: #9DBFAF;
+		}
+
+		.searchTerm:focus {
+			color: #00B4CC;
+		}
+
+		.searchButton {
+			width: 40px;
+			height: 36px;
+			border: 1px solid #d6d6d6;
+			background: #d6d6d6;
+			text-align: center;
+			color: #fff;
+			border-radius: 0 5px 5px 0;
+			cursor: pointer;
+			font-size: 20px;
+		}
+
+		.wrap {
+			width: 200px;
+			float: right;
+		}
+
+		label#file_label.custom-file-label::after {
+			border-radius: 400px;
+			background-color: #f5f5f5;
+		}
+
+		.custom-file-label {
+			border-radius: 400px;
+		}
+
+		#down_icon {
+			animation: sdb04 1.5s infinite;
+		}
+
+		@keyframes sdb04 {
+			0% {
+				transform: translate(0, 0);
+			}
+
+			20% {
+				transform: translateY(30px);
+			}
+
+			40% {
+				transform: translate(0, 0);
+			}
 		}
 	</style>
 </head>
@@ -38,159 +119,184 @@
 		<!-- logo -->
 		<div style="margin: auto; width: 50%; text-align: center; padding-top: 100px;">
 			<a href="/" style="text-decoration: none;">
-				<h2 class="logo">DaDol</h2>
-				<p class="logo-downside">EXECUTABLE FILE ANALYSIS</p>
+				<a href="/"><img src="../../../css/logo.png" width="500px"></a>
 			</a>
 		</div>
 		<!-- logo fin -->
 
 		<div style="margin: auto; width: 50%; padding-top: 80px;">
-			<form id="uploadForm" action="/create" method="post" enctype="multipart/form-data" style="width: 89%; float: left;">
+			<form id="uploadForm" action="/create" method="post" enctype="multipart/form-data"
+				style="width: 89%; float: left;">
 				<div class="custom-file">
-			    	<input type="file" class="custom-file-input" id="file" name="userFile" aria-describedby="inputGroupFileAddon01" accept=".exe">
-			    	<label class="custom-file-label" for="file" id="file_label">Choose file</label>
-			  	</div>
+					<input type="file" class="custom-file-input" id="file" name="userFile" accept=".exe">
+					<label class="custom-file-label" for="file" id="file_label"><span
+							class="fas fa-search"></span><span>Choose file</span></label>
+				</div>
 			</form>
-			<button class="btn btn-light" id="myBtn" onclick="modal()" style="background-color: #e9ecef; border: 1px solid #ced4da;">submit</button>
+			<button class="btn btn-light" id="myBtn" onclick="modal()"
+				style="background-color: #f5f5f5; border: 1px solid #ced4da; border-radius: 400px;">submit</button>
 		</div>
-
 		<a href="#" style="text-decoration: none; color: black;" onclick="move_to_sub();">
 			<div style="width: 500px; margin: auto; text-align: center; padding-top: 200px; ">
-				<h2>Public Submissions</h2>
-				<p>
-		        	<span class="fas fa-angle-double-down"></span>
-	      		</p>
+				<h2 id="to_down">Public Submissions<br><span class="fas fa-angle-double-down" id="down_icon"></span>
+				</h2>
 			</div>
 		</a>
 	</div>
 
-	<div style="width: 100%; height: 100vh; padding-top: 80px;" id="submissions">
-		<div style="margin: auto; width: 85%; margin-top: 20px; height: 500px; overflow: scroll; border-top: 2px solid; border-bottom: 2px solid;">
-			<table class="table table-striped" id="anal_list">
+	<input type="hidden" value="0" id="anal_t">
+	<div style="width: 100%; height: 100vh; padding-top: 40px;" id="submissions">
+		<div style="margin-left: 5%;">
+			<a href="/"><img src="../../../css/logo.png" width="200px"></a>
+		</div>
+		<div style="margin-left: 5%; width: 90%; padding-top: 40px;">
+			<h3 style="border-bottom: 2px solid #f2f2f2; width: auto; float: left;">PUBLIC SUBMISSION</h3>
+			<div class="wrap">
+				<div class="search">
+					<input type="text" class="searchTerm" placeholder="search">
+					<button type="submit" class="searchButton">
+						<i class="fa fa-search"></i>
+					</button>
+				</div>
+			</div>
+		</div>
+		<div style="margin: auto; width: 90%; margin-top: 5px; height: 400px; overflow: scroll; border-top: 2px solid rgb(214, 214, 214);"
+			id="table_section">
+			<table class="table table-striped table-hover" id="anal_list">
 				<tr>
 					<th>DATE</th>
 					<th>FILE NAME</th>
 					<th>MD5</th>
 					<th>RISK</th>
 				</tr>
-				<% for(var i = 0; i < anal_list.length; i++) { %>
-					<tr>
-						<td><%=anal_list[i][3]%></td>
-						<td><%=anal_list[i][0]%></td>
-						<%
+				<% var t = 0; %>
+				<% for(var i = anal_list.length - 1; i >= 0; i--) { %>
+				<tr onclick="show_risk(<%=i%>)" id="anal_<%=i%>" class="anal_ids">
+					<td><%=anal_list[i][3]%></td>
+					<td><%=anal_list[i][0]%></td>
+					<%
 							var flag = true;
 							var per = anal_list[i][4].positives/anal_list[i][4].total;
 							var color;
+							var cl;
 							var risk;
 							if(anal_list[i][4] === "none")flag = false;
 							if(per <= 0.1) {
 								color = "gr";
+								cl = "green";
 								risk = "SAFE";
 							}
 							else if(per <= 0.5) {
 								color = "gl";
+								cl = "gold";
 								risk = "NORMAL";
 							}
 							else {
 								color = "rd";
+								cl = "red";
 								risk = "DANGER";
 							}
 						%>
-						<td><%=anal_list[i][1]%></td>
-						<td><button class="btn <%=color%>"><%=risk%></button></td>
-					</tr>
+					<td><%=anal_list[i][1]%></td>
+					<td>
+						<!-- <button class="btn <%=color%>"><%=risk%></button> -->
+						<p style="color: <%=cl%>"><%=anal_list[i][4].total%>&nbsp;/&nbsp;<%=anal_list[i][4].positives%>
+						</p>
+					</td>
+				</tr>
+				<tr style="display: none" id="r_<%=i%>">
+					<td colspan="4">
+						<div class="container" style="text-align: left;">
+							<div class="row">
+								<div class="col">
+									<p style="border-bottom: 1px solid #b5b4b4;">
+										Go to result : <a href="<%=anal_list[i][2]%>"><%=anal_list[i][0]%></a> (<b
+											style="color:<%=cl%>"><%=anal_list[i][4].total%>&nbsp;/&nbsp;<%=anal_list[i][4].positives%></b>&nbsp;&nbsp;engines
+										detected this file)
+									</p>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col" style="margin-bottom: 5px;">
+									<p>sha1 : <%=anal_list[i][4].sha1%></p>
+									<p style="border-bottom: 1px solid #b5b4b4; ">sha256 : <%=anal_list[i][4].sha256%>
+									</p>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									<table class="table" style="width: 80%; margin: auto; margin-bottom: 5px;">
+										<%
+											if(anal_list[i][4].positives){
+											%>
+										<tr>
+											<th>Company</th>
+											<th>Detection</th>
+										</tr>
+										<%}%>
+										<%
+											for(var j = 0; j < anal_list[i][4].positives; j++){
+										%>
+										<tr>
+											<td><%=anal_list[i][4].log[j].key%></td>
+											<td><%=anal_list[i][4].log[j].result%></td>
+										</tr>
+										<%
+											}
+										%>
+									</table>
+								</div>
+							</div>
+							<div class="col" style="margin-bottom: 5px;">
+								<p style="border-top: 1px solid #b5b4b4; color: gray; font-size: 13px; ">It is shown
+									data from <a href="http://www.virustotal.com"
+										style="font-size: 13px; color: #545454;">VIRUSTOTAL.</a></p>
+							</div>
+						</div>
+					</td>
+				</tr>
 				<% } %>
 			</table>
-			<!-- <ul class="list-group list-group-flush">
-			<%
-				for(var i = 0; i < anal_list.length; i++){
-			%>
-					<li class="list-group-item">
-						<%=anal_list[i][3]%>&nbsp;&nbsp;&nbsp;<a href = '<%=anal_list[i][2]%>'><%=anal_list[i][0]%></a>&nbsp;&nbsp;&nbsp;
-						<%
-							var flag = true;
-							var per = anal_list[i][4].positives/anal_list[i][4].total;
-							var color;
-							if(anal_list[i][4] === "none")flag = false;
-							if(per <= 0.1)color = "green";
-							else if(per <= 0.5) color = "gold";
-							else color = "red";
-						%>
-						<%
-						if(flag){
-						%>
-						(<b style = "color:<%=color%>"><%=anal_list[i][4].total%>&nbsp;/&nbsp;<%=anal_list[i][4].positives%></b>&nbsp;&nbsp;engines detected this file)
-						<%}%>
-						<br>
-						<br>
-						
-						md5 : <%=anal_list[i][1]%><br>
-
-						<%
-						if(flag){
-						%>
-						sha1 : <%=anal_list[i][4].sha1%><br>
-						sha256 : <%=anal_list[i][4].sha256%><br>
-						<table class="table table-striped">
-							<%
-							if(anal_list[i][4].positives){
-							%>
-							<tr>
-								<th>Company</th>
-								<th>Detection</th>
-							</tr>
-							<%}%>
-						<%
-							for(var j = 0; j < anal_list[i][4].positives; j++){
-						%>
-								<tr>
-								<td><%=anal_list[i][4].log[j].key%></td>&nbsp;&nbsp;&nbsp;<td><%=anal_list[i][4].log[j].result%></td>
-								</tr>
-						<%
-							}
-						%>
-						</table>
-						<br>
-						The above data is taken from a <a href = "https://www.virustotal.com/">virustotal.</a>
-						<%
-							}
-						else{
-						%>
-							<br>No matches found
-						<%
-						}
-						%>
-					</li>
-			<%
-				}
-			%>
-			</ul> -->
 		</div>
+		<div style="width: 90%; margin: auto; margin-top: 10px; text-align: center;">
+			<% for(var i=0; i<=anal_list.length/10; i++) {
+				%>
+			<button class="btn" style="border: 1px solid #f1f1f3;" onclick="show_anal_list(<%=i%>)"><%=i+1%></button>
+			<%
+			}
+			%>
+		</div>
+		<i class="fa fa-chevron-circle-up" aria-hidden="true"
+			style="position: fixed; top: 95%; left: 97%; font-size: 25px; cursor: pointer;" onclick="go_to_top();"
+			id="top_icon"></i>
 	</div>
 
 	<div id="myModal" style="display: none;">
-		<div class="spinner-border text-secondary" role="status" style="position: absolute; z-index: 300; top: 35%; left: 50%; width: 40px; height: 40px;">
+		<div class="spinner-border text-secondary" role="status"
+			style="position: absolute; z-index: 300; top: 35%; left: 50%; width: 40px; height: 40px;">
 		</div>
-		<h4 style="z-index: 300; position: absolute; top: 46%; left: 49%; font-size: 20px; color: #6c757d;">loading...</h4>
-		<div style="background-color: #efefef; width: 100%; height: 100vh; z-index: 299; position: absolute; top:0; opacity: 0.7;">
+		<h4 style="z-index: 300; position: absolute; top: 46%; left: 49%; font-size: 20px; color: #6c757d;">loading...
+		</h4>
+		<div
+			style="background-color: #efefef; width: 100%; height: 100vh; z-index: 299; position: absolute; top:0; opacity: 0.7;">
 		</div>
 	</div>
-	
+
 	<script type="text/javascript">
 		function modal() {
 			var modal = document.getElementById('myModal');
 			var btn = document.getElementById("myBtn");
 			var uploadform = document.getElementById("uploadForm");
 			var file = document.getElementById("file");
-			if(file.value == "")
+			if (file.value == "")
 				alert("not file");
-			else{
+			else {
 				modal.style.display = "block";
 				uploadform.submit();
 				btn.onclick = "";
 			}
 		}
-		$('#file').on('change', function(){
+		$('#file').on('change', function () {
 			var fileName = $(this).val();
 			$(this).next('.custom-file-label').html(fileName);
 		});
@@ -198,7 +304,50 @@
 		function move_to_sub() {
 			$('html, body').animate({ scrollTop: $('#submissions').offset().top }, 1000)
 		}
+		function go_to_top() {
+			$("html, body").animate({ scrollTop: 0 }, 1000);
+		}
+		$('#top_icon').hide();
+		$(window).scroll(function () {
+			if ($(document).scrollTop() > 100) {
+				$('#top_icon').fadeIn(500);
+			}
+			else {
+				$('#top_icon').fadeOut(500);
+			}
+		});
 	</script>
 </body>
 
 </html>
+<script>
+	function show_risk(i) {
+		var cnt = <%=anal_list.length%>;
+		var j = 0;
+		for (j = 0; j < cnt; j++) {
+			if (j != i) {
+				$('#r_' + j).hide();
+				$('#anal_' + j).css('background-color', 'white');
+			}
+		}
+
+		if ($('#r_' + i).is(':hidden')) {
+			$('#r_' + i).show();
+			$('#anal_' + i).css('background-color', '#efefef');
+		} else {
+			$('#r_' + i).hide();
+			$('#anal_' + i).css('background-color', 'white');
+		}
+	}
+
+	$(document).ready(function () {
+		$('#ana_0').show();
+	});
+
+	$(".searchTerm").on("keyup", function () {
+		var value = $(this).val().toLowerCase();
+		$("#anal_list tr.anal_ids").filter(function () {
+			$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+		});
+	});
+</script>

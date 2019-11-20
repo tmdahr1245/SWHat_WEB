@@ -19,8 +19,6 @@ module.exports = function (req, res) {
 					.then(function (contents) {
 						name = path.basename(contents[0].replace(/\\/gi, '/'));
 					});
-				if (virus == "none")
-					virus = "none";
 				anal_list.push([
 					name,
 					hash,

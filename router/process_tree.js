@@ -1,6 +1,5 @@
 const JSONStream = require("JSONStream");
 const fs = require('fs');
-const async = require('async');
 
 let tree = [];
 let cnt = 0;

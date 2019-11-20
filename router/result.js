@@ -196,13 +196,8 @@ module.exports = function (req, res) {
 		}
 		else if (err.code === 'ENOENT') {
 			console.log('file or directory does not exist');
-			//res.status(401).send("unauthenticated")
-			// res.send('<script type="text/javascript">alert("오류발생");</script>');
 			res.write("<script language=\"javascript\">alert('64-bit process analysis is under preparation.')</script>");
 			res.write(`<script language=\"javascript\">window.location=\"/result/${timestamp}/${parent}\"</script>`);
-
-			//res.redirect(`/result/${timestamp}/${parent}`)
-			
 		}
 	});
 };

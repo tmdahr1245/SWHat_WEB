@@ -8,12 +8,9 @@ var func = function (hash) {
 		con.setDelay(0);
 		con.getFileReport(hash, function (data) {
 			list.log = {}
-			//console.log(data)
 			if (data.response_code == 1) {
 				for (let [key, value] of Object.entries(data.scans)) {
 					if (value.detected) {
-						//console.log(`${key}: ${value.result}`);
-						//list[0].push([key, value.result])
 						list.log[cnt++] = { key: key, result: value.result }
 					}
 				}
@@ -22,10 +19,6 @@ var func = function (hash) {
 			list.positives = data.positives;
 			list.sha1 = data.sha1;
 			list.sha256 = data.sha256;
-			// list.push(data.total)
-			// list.push(data.positives)
-			// list.push(data.sha1)
-			// list.push(data.sha256)
 			resolve(list);
 
 		}, function (err) {

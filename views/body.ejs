@@ -1,0 +1,93 @@
+<table class="table table-striped table-hover" id="anal_list">
+    <tr>
+        <th>DATE</th>
+        <th>FILE NAME</th>
+        <th>MD5</th>
+        <th>RISK</th>
+    </tr>
+    <% for(var i = t; i < anal_list.length; i++) { %>
+    <tr onclick="show_risk(<%=i%>)" id="anal_<%=i%>" class="anal_ids">
+        <td><%=anal_list[i][3]%></td>
+        <td><%=anal_list[i][0]%></td>
+        <%
+                    var flag = true;
+                    var per = anal_list[i][4].positives/anal_list[i][4].total;
+                    var color;
+                    var cl;
+                    var risk;
+                    if(anal_list[i][4] === "none")flag = false;
+                    if(per <= 0.1) {
+                        color = "gr";
+                        cl = "green";
+                        risk = "SAFE";
+                    }
+                    else if(per <= 0.5) {
+                        color = "gl";
+                        cl = "gold";
+                        risk = "NORMAL";
+                    }
+                    else {
+                        color = "rd";
+                        cl = "red";
+                        risk = "DANGER";
+                    }
+                %>
+        <td><%=anal_list[i][1]%></td>
+        <td>
+            <!-- <button class="btn <%=color%>"><%=risk%></button> -->
+            <p style="color: <%=cl%>"><%=anal_list[i][4].total%>&nbsp;/&nbsp;<%=anal_list[i][4].positives%>
+        </td>
+    </tr>
+    <tr style="display: none" id="r_<%=i%>">
+        <td colspan="4">
+            <div class="container" style="text-align: left;">
+                <div class="row">
+                    <div class="col">
+                        <p style="border-bottom: 1px solid #b5b4b4;">
+                            Go to result : <a href="<%=anal_list[i][2]%>"><%=anal_list[i][0]%></a> (<b
+                                style="color:<%=cl%>"><%=anal_list[i][4].total%>&nbsp;/&nbsp;<%=anal_list[i][4].positives%></b>&nbsp;&nbsp;engines
+                            detected this file)
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col" style="margin-bottom: 5px;">
+                        <p>sha1 : <%=anal_list[i][4].sha1%></p>
+                        <p style="border-bottom: 1px solid #b5b4b4; ">sha256 : <%=anal_list[i][4].sha256%></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <table class="table" style="width: 80%; margin: auto; margin-bottom: 5px;">
+                            <%
+                                    if(anal_list[i][4].positives){
+                                    %>
+                            <tr>
+                                <th>Company</th>
+                                <th>Detection</th>
+                            </tr>
+                            <%}%>
+                                <%
+                                    for(var j = 0; j < anal_list[i][4].positives; j++){
+                                %>
+                            <tr>
+                                <td><%=anal_list[i][4].log[j].key%></td>
+                                <td><%=anal_list[i][4].log[j].result%></td>
+                            </tr>
+                            <%
+                                    }
+                                %>
+                        </table>
+                    </div>
+                </div>
+                <div class="col" style="margin-bottom: 5px;">
+                    <p style="border-top: 1px solid #b5b4b4; color: gray; font-size: 13px; ">It is shown data from <a
+                            href="http://www.virustotal.com" style="font-size: 13px; color: #545454;">VIRUSTOTAL.</a>
+                    </p>
+                </div>
+            </div>
+        </td>
+    </tr>
+
+    <% } %>
+</table>

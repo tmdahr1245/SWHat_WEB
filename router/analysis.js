@@ -42,15 +42,12 @@ module.exports = async function (req, res) {
 	let timestamp = argument.timestamp;
 	console.log("timestamp : " + timestamp);
 	const files = await glob("wanna/*.json");
-	//const files = await glob("kakao/*.json");
 	fs.copyFileSync('wanna/info.json', `upload/${timestamp}/info.json`)
-	//fs.copyFileSync('kakao/info.json', `upload/${timestamp}/info.json`)
 	console.log(files)
 
 	const promises = files.map(async file => {
 		let logfile = file;
 		if(logfile === "wanna/info.json"){
-		//if(logfile === "kakao/info.json"){
 			return new Promise((resolve, reject) => {resolve()})
 		}
 		console.log(logfile);
@@ -98,7 +95,7 @@ module.exports = async function (req, res) {
 					for (let i = 0; i < log.length; i++) {
 						if (log[i].api === 'NtCreateFile') {
 							let flag = false;
-							let drop_file, file_length;//= fs.createWriteStream(log[i].FileName, {encoding: 'latin1'});
+							let drop_file, file_length;
 							if ((parseInt(log[i].AccessMask) & 0x40000000) && !parseInt(log[i].ret)) {
 								for (let j = i + 1; j < log.length; j++) {
 									if (log[j].api === 'NtWriteFile') {
@@ -167,7 +164,6 @@ module.exports = async function (req, res) {
 						}
 						else if (check_list(log[i].api, regcreate) || check_list(log[i].api, regopen)) {
 							if (!parseInt(log[i].ret) && parseInt(log[i].KeyHandle)) {
-								//ex아닐때는 그냥 push하고 ex일때는 lpdwdispsition이 2가 아니면 push
 								if (!(log[i].lpdwDisposition != undefined && parseInt(log[i].lpdwDisposition) == 2)) {
 									if (check_list(log[i].api, regcreate)) {
 										registry_json[registry_cnt++] = {
@@ -194,8 +190,6 @@ module.exports = async function (req, res) {
 												value: lpValueName,
 												data: log[j].Data
 											};
-											//https://docs.microsoft.com/ko-kr/windows/win32/sysinfo/registry-value-types
-											//dwType
 										}
 									}
 									else if (check_list(log[j].api, regsetkeyvalue) && log[i].KeyHandle == log[j].KeyHandle) {
@@ -308,7 +302,6 @@ module.exports = async function (req, res) {
 						fs.writeFileSync(logPath + '/service.json', JSON.stringify(service_json, null, 2));
 
 						console.log("finish to make friendly log");
-						//resolve
 						resolve(res)
 					})
 				})
@@ -318,14 +311,9 @@ module.exports = async function (req, res) {
 	Promise.all(promises).then(ret => {
 		const virus_total = require('./virus_total');
 		var hash = fs.readFileSync(`./upload/${timestamp}/FILEHASH`, 'utf8');
-		//console.log(hash)
 		virus_total(hash).then(function(ret){
-			//console.log(ret);
 			fs.writeFileSync(`./upload/${timestamp}/VIRUS`, JSON.stringify(ret, null, 2));
 			return res.redirect(`/result/${timestamp}/7680`)
 		})
-		//return res.redirect(`/result/${timestamp}/7680`)//워너
-		//return res.redirect(`/result/${timestamp}/10268`)//카톡
-		// return res.redirect(`/result/${timestamp}/9276`)//다우
 	});
 };

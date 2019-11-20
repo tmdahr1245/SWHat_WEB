@@ -1,21 +1,39 @@
-<body>
-    <div>
-        <div style="border: 1px solid black; float: left; width: 14%;">
-            <%
-            var packet = packet;
-            var p_size = packet.length;
-            for (var t = 0;  t < p_size; t += 0x10){
+<!DOCTYPE html>
+<html>
 
-            %>
-                    <%=("00000000" + t.toString(16)).substr(-8)%>
-                    <br>
-            <%
-            
-                }
-            %>
-        </div>
-        <div style="border: 1px solid black; float: left; width: 60%;">
-                <%
+<head>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
+	<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+</head>
+
+<body>
+	<div class="w-100">
+		<div class="container" style="max-width: 820px;">
+			<div class="row">
+				<div class="col-md-2" style="border: 1px solid black; text-align: left;">
+					<%
+                    var packet = packet;
+                    var p_size = packet.length;
+                    for (var t = 0;  t < p_size; t += 0x10){
+
+                    %>
+					<%=("00000000" + t.toString(16)).substr(-8)%>
+					<br>
+					<%
+                    
+                        }
+                    %>
+				</div>
+				<div class="col-md-7" style="border: 1px solid black; text-align: left;">
+					<%
                     p_size = packet.length;
                     for (var t = 0;  t < p_size; t += 0x10){
                             for(var s = t; s < t + 0x10; s++){//hex값 출력
@@ -23,35 +41,39 @@
                                 if(s == p_size)break;
                                 if(hex < 0x10){
                     %>
-                                    0<%=hex.toString(16)%>&nbsp;
-                    <%
+					0<%=hex.toString(16)%>&nbsp;
+					<%
                                 }
                                 else{
-                    %>      
-                                    <%=hex.toString(16)%>&nbsp;
-                    <% 
+                    %>
+					<%=hex.toString(16)%>&nbsp;
+					<% 
                                 }
                             }
                             %><br><%
                     }%>
-        </div>
-        <div style="border: 1px solid black; float: left; width: 15%;">
-            <%    
-                p_size = packet.length;
-                for (var t = 0;  t < p_size; t += 0x10){
-                        var raw = "";
-                        for(var s = t; s < t + 0x10; s++){
-                            if(s == p_size)break;
-                            if(packet.charCodeAt(s)<0x20 || (packet.charCodeAt(s)>=127 && packet.charCodeAt(s) <= 160) || packet.charCodeAt(s) == 173)
-                                raw += '.';
-                            else if (packet.charCodeAt(s) == 0x20)
-                                raw += ' ';
-                            else
-                                raw += packet[s];
-                        }
-            %>
-                    <%=raw%><br>
-            <%  }%>
-        </div>
-    </div>
+				</div>
+				<div class="col-md-3" style="border: 1px solid black; text-align: left;">
+					<%    
+                        p_size = packet.length;
+                        for (var t = 0;  t < p_size; t += 0x10){
+                                var raw = "";
+                                for(var s = t; s < t + 0x10; s++){
+                                    if(s == p_size)break;
+                                    if(packet.charCodeAt(s)<0x20 || (packet.charCodeAt(s)>=127 && packet.charCodeAt(s) <= 160) || packet.charCodeAt(s) == 173)
+                                        raw += '.';
+                                    else if (packet.charCodeAt(s) == 0x20)
+                                        raw += ' ';
+                                    else
+                                        raw += packet[s];
+                                }
+                    %>
+					<%=raw%><br>
+					<%  }%>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
+
+</html>

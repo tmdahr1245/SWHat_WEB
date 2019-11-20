@@ -2,6 +2,8 @@ const mkdirp = require('mkdirp-promise');
 const fs = require('fs');
 const fs_extra = require('fs-extra');
 const crypto = require('crypto');
+const exec = require('child_process').exec;
+
 module.exports = function (req, res) {
 	try {
 		const files = req.files;
@@ -33,16 +35,14 @@ module.exports = function (req, res) {
 			if (err) {
 				return console.error(err)
 			}
-			//let stream = fs.createReadStream("file/"+timestamp+"/"+fileName, {encoding: 'binary'})
 			fs.readFile("upload/" + timestamp + "/" + fileName, 'binary', function (err, data) {
 				if (!(data[0] == 'M' && data[1] == 'Z')) {
 					fs.unlinkSync("./upload/" + timestamp + "/" + fileName);
 					res.write("<script language=\"javascript\">alert('Not PE')</script>");
 					res.write(`<script language=\"javascript\">window.location=\"/\"</script>`);
 				}
-				//else if()//32bit64bit
-				//image_file_header->machine = 014c
-				//image_file_header->machine = 8664
+				//image_file_header->machine = 014c [32bit]
+				//image_file_header->machine = 8664 [64bit]
 				else {
 					var image_file_header = "0x";
 					for (var i = 0x3f; i > 0x3b; i--)
@@ -73,7 +73,11 @@ module.exports = function (req, res) {
 								fs.writeFileSync(`./upload/${timestamp}/FILEHASH`, hash.digest('hex'));
 							}
 						});
-						res.redirect('/analysis?timestamp=' + timestamp);
+
+						exec("sudo kvm-spice -enable-kvm -hda /var/lib/libvirt/images/win10.qcow2 -spice port=5900,disable-ticketing -m 8192 -net nic -net user -usb -device usb-tablet");
+						setTimeout(() => {
+							res.redirect(`/spice?timestamp=${timestamp}&filename=${fileName}`);
+						}, 30000);
 					}
 
 				}
